@@ -10,6 +10,7 @@ const Notes: React.FC = () => {
     setNotesList([...notesList, note]);
     setNote("");
   };
+  console.log("notesList", notesList);
 
   return (
     <div style={{ padding: "20px" }}>
