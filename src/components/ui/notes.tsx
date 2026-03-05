@@ -10,7 +10,9 @@ const Notes: React.FC = () => {
     setNotesList([...notesList, note]);
     setNote("");
   };
-
+  console.log("Notes component rendered");
+  console.log("Current note:", note);
+  console.log("Notes list:", notesList);
   return (
     <div style={{ padding: "20px" }}>
       <h2>My Notes</h2>
