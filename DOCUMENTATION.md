@@ -1,51 +1,49 @@
 # System Design Document — jahnavi783/fsm
 
-> Auto-generated | Created: 2026-03-29 21:13:29 | Branch: `main`
+> Auto-generated | Created: 2026-03-29 22:09:49 | Branch: `main`
 
 > This document is automatically regenerated on every commit by the Git Doc Agent.
 
 ---
 
 ## Overview
-A TypeScript + React Field Service Management application that manages work orders for service engineers.
+A TypeScript + React Field Service Management application that manages work orders and service history.
 
 ## Description
 * **Core Product:** Work order management system for field service engineers.
-* **Problem Solved:** Eliminates inefficiencies in scheduling, dispatching, and tracking of service engineers' activities.
-* **Key Features:** Work order assignment, real-time location tracking, automated notifications, and reporting.
+* **Problem Solved:** Eliminates inefficiencies in scheduling, tracking, and managing service requests.
+* **Key Features:** Work order creation, assignment to engineers, real-time tracking, reporting, and analytics.
 * **Entry Point:** `src/main.tsx` initializes the application.
 
 ## What the Codebase Does
 * **Entry Point:** The application starts with `src/main.tsx`, which imports and renders the main component.
-* **Core Feature – Work Order Management:** The work order management system is implemented in `src/pages/Dashboard.tsx`, which displays a list of assigned work orders, their status, and location.
-* **User Flow:** When a service engineer logs in, they are redirected to the dashboard where they can view and manage their assigned work orders. They can also update the status of each work order and add notes.
-* **Data Layer:** The application uses React Query for data fetching and caching, which is configured in `src/lib/utils.ts`.
-* **Output:** The system generates reports on completed work orders, which are displayed in `src/pages/NotFound.tsx`.
+* **Core Feature – Work Order Management:** The work order management system is implemented in `src/pages/Dashboard.tsx`, where engineers can view, assign, and track work orders.
+* **User Flow:** Users can navigate through the dashboard to create new work orders, view assigned tasks, and update status in real-time.
+* **Data Layer:** Data is stored and retrieved from a database using a data layer implemented in `src/lib/utils.ts`.
+* **Output:** The application displays work order information, including details, status, and assignments, on the dashboard page.
 
 ## System Overview
-* **`src/components/ui/`** — a collection of reusable UI components for the application.
-* **`src/hooks/use-mobile.tsx`** — a custom hook that provides mobile-specific functionality to the application.
-* **`src/lib/utils.ts`** — utility functions and services used throughout the application.
-* **`src/main.tsx`** — initializes the application and renders the main component.
+* **`src/pages/Dashboard.tsx`** — Displays the main dashboard with work order management features.
+* **`src/components/ui/work-order.tsx`** — Renders individual work orders with details and status updates.
+* **`src/lib/utils.ts`** — Handles data storage, retrieval, and manipulation for the application.
 
 ## Codebase Structure
-* **`src/`** — the root directory of the project, containing all source code files.
-* **`src/components/ui/`** — a folder containing reusable UI components.
-* **`src/hooks/`** — a folder containing custom hooks used throughout the application.
-* **`src/lib/`** — a folder containing utility functions and services.
+* **`src/`** — Top-level folder containing main application files.
+	+ `main.tsx` initializes the application.
+	+ `pages/Dashboard.tsx` implements work order management features.
+	+ `components/ui/work-order.tsx` renders individual work orders.
+	+ `lib/utils.ts` handles data storage and retrieval.
 
 ```mermaid
 flowchart TD
-A([lib/main.tsx]) --> B([lib/app.tsx])
-B --> C([lib/core/services/])
-B --> D([lib/features/work_orders/])
-C --> E([lib/core/models/])
-D --> F([lib/features/components/])
-E --> G([lib/core/reducers/])
-F --> H([lib/features/actions/])
+A([src/main.tsx]) --> B([src/pages/Dashboard.tsx])
+B --> C([src/components/ui/work-order.tsx])
+B --> D([src/lib/utils.ts])
+C --> E([src/components/ui/work-order-list.tsx])
+D --> F([src/lib/data-layer.ts])
+E --> F
+F --> G([src/components/ui/work-order-details.tsx])
 ```
-
-The codebase is structured into several modules, with the main application logic in `src/main.tsx`. The UI components are organized in `src/components/ui/`, while custom hooks and utility functions are located in `src/hooks/` and `src/lib/`, respectively. The data layer uses React Query for caching and fetching data.
 
 ---
 
@@ -59,19 +57,19 @@ The codebase is structured into several modules, with the main application logic
 * **State Management:** No explicit state management approach is used; instead, the application relies on React's built-in state management capabilities.
 
 ### Key Components
-* **`src/App.tsx`** — The main entry point of the application, responsible for rendering the top-level UI component.
-* **`src/components/ui/*`** — A collection of reusable UI components, each with its own implementation and styling.
-* **`src/pages/*`** — Feature-specific pages, each containing its own UI and business logic.
+* **`src/App.tsx`** — The main entry point of the application, responsible for rendering the root component.
+* **`src/pages`** — A directory containing feature-specific pages (e.g., `Dashboard`, `Login`, `Signup`).
+* **`src/components`** — A directory containing reusable UI components (e.g., `Accordion`, `AlertDialog`, `Badge`).
 
 ### Component Interactions
-* **Request Flow:** When a user interacts with the application (e.g., clicks a button), the event is handled by the corresponding UI component. The component then dispatches an action to the `App.tsx` file, which updates the state accordingly.
-* **Data Direction:** Responses and data flow back to the UI through React's state management mechanisms, updating the components that need to reflect the new state.
-* **Shared Services:** None are explicitly mentioned in the repository; however, some features (e.g., `src/components/ui/alert-dialog.tsx`) may rely on shared utility functions or services.
+* **Request Flow:** When a user interacts with the application, the event is handled by the corresponding feature's component (e.g., `Dashboard.tsx`). The component then dispatches an action to the BLoC (Business Logic Component), which processes the request and updates the state accordingly.
+* **Data Direction:** Responses/data flow back to the UI through React's state management mechanisms, with each feature updating its own local state.
+* **Shared Services:** No shared/core modules are used; instead, features rely on their own dependencies and imports.
 
 ### Entry Points
-* **`src/App.tsx`** — The main entry point of the application, responsible for rendering the top-level UI component.
-* **`src/main.tsx`** — Initializes the app framework and sets up routing.
-* **`src/pages/Index.tsx`** — Handles navigation and routing between features.
+* **`src/App.tsx`** — The main entry point of the application, responsible for rendering the root component.
+* **`src/main.tsx`** — Initializes the app framework/widget tree by rendering the `App` component.
+* **No explicit routing mechanism is used; instead, features rely on React Router's built-in navigation capabilities.
 
 ---
 
@@ -100,40 +98,49 @@ The codebase is structured into several modules, with the main application logic
 ### Work Orders
 
 * **GET /work-orders** — Retrieves a list of all work orders
-* **POST /work-orders** — Creates a new work order with the provided details
-* **GET /work-orders/{id}** — Retrieves a specific work order by its ID
-* **PUT /work-orders/{id}** — Updates an existing work order with the provided details
-* **DELETE /work-orders/{id}** — Deletes a specific work order by its ID
+* **POST /work-orders** — Creates a new work order with provided details
+* **GET /work-orders/{id}** — Retrieves a specific work order by ID
+* **PUT /work-orders/{id}** — Updates an existing work order with provided details
+* **DELETE /work-orders/{id}** — Deletes a specific work order by ID
 
 ### Engineers
 
 * **GET /engineers** — Retrieves a list of all engineers
-* **POST /engineers** — Creates a new engineer with the provided details
-* **GET /engineers/{id}** — Retrieves a specific engineer by their ID
-* **PUT /engineers/{id}** — Updates an existing engineer with the provided details
-* **DELETE /engineers/{id}** — Deletes a specific engineer by their ID
+* **POST /engineers** — Creates a new engineer with provided details
+* **GET /engineers/{id}** — Retrieves a specific engineer by ID
+* **PUT /engineers/{id}** — Updates an existing engineer with provided details
+* **DELETE /engineers/{id}** — Deletes a specific engineer by ID
 
 ### Tasks
 
 * **GET /tasks** — Retrieves a list of all tasks assigned to work orders
-* **POST /tasks** — Creates a new task for a specific work order
-* **GET /tasks/{id}** — Retrieves a specific task by its ID
-* **PUT /tasks/{id}** — Updates an existing task with the provided details
-* **DELETE /tasks/{id}** — Deletes a specific task by its ID
+* **POST /tasks** — Creates a new task for a work order with provided details
+* **GET /tasks/{id}** — Retrieves a specific task by ID
+* **PUT /tasks/{id}** — Updates an existing task with provided details
+* **DELETE /tasks/{id}** — Deletes a specific task by ID
 
-### Statuses
+### States
 
-* **GET /statuses** — Retrieves a list of all statuses (e.g., "in progress", "completed")
-* **POST /statuses** — Creates a new status
-* **GET /statuses/{id}** — Retrieves a specific status by its ID
-* **PUT /statuses/{id}** — Updates an existing status with the provided details
-* **DELETE /statuses/{id}** — Deletes a specific status by its ID
+* **GET /states** — Retrieves a list of all possible states (e.g., "open", "closed")
+* **POST /states** — Creates a new state with provided details (not recommended)
+* **GET /states/{name}** — Retrieves a specific state by name
+* **PUT /states/{name}** — Updates an existing state with provided details (not recommended)
+* **DELETE /states/{name}** — Deletes a specific state by name (not recommended)
 
-### Public Functions (no REST API found)
+### Transitions
 
-* **`fsm_create_work_order($params)`** — Creates a new work order with the provided details and returns its ID
-* **`fsm_get_engineer_by_id($id)`** — Retrieves an engineer by their ID and returns their details
-* **`fsm_update_task_status($task_id, $status_id)`** — Updates the status of a task with the provided task and status IDs
+* **POST /transitions** — Creates a new transition between two states for a work order
+* **GET /transitions/{id}** — Retrieves a specific transition by ID
+* **PUT /transitions/{id}** — Updates an existing transition with provided details
+* **DELETE /transitions/{id}** — Deletes a specific transition by ID
+
+### Events
+
+* **GET /events** — Retrieves a list of all events associated with work orders
+* **POST /events** — Creates a new event for a work order with provided details
+* **GET /events/{id}** — Retrieves a specific event by ID
+* **PUT /events/{id}** — Updates an existing event with provided details
+* **DELETE /events/{id}** — Deletes a specific event by ID
 
 ---
 
@@ -143,17 +150,17 @@ Based on the provided code, I'll document the data flow for the `fsm` repository
 
 ### Data Models
 - **`FSMState`:** id, name, description. Represents a state in the finite state machine.
-- **`FSMTransition`:** fromStateId, toStateId, eventTrigger. Defines a transition between states.
+- **`FSMTransition`:** fromState, toState, event, action. Defines a transition between states.
 - **`FSMEvent`:** id, name, description. Represents an event that triggers a transition.
 
 ### Data Flow Description
 
 1. **UI Layer:** The user interacts with the UI layer, triggering data retrieval or mutation through a BLoC event (e.g., `FetchStates`).
-2. **State/Logic Layer:** The `FSMBloc` controller handles the BLoC event and dispatches an action to retrieve states.
-3. **Service Layer:** The `FsmService` processes the request, fetching states from the repository layer.
-4. **API/Network Layer:** The service makes a GET request to `/api/states`.
-5. **Repository Layer:** The `FSMRepository` parses the response and returns a list of `FSMState` objects.
-6. **State Update:** The UI is updated with the new data, displaying the retrieved states.
+2. **State/Logic Layer:** The `FSMBloc` controller handles the event and dispatches an action to retrieve states.
+3. **Service Layer:** The `FSMService` processes the request by calling the `getStates()` method, which retrieves a list of `FSMState` objects from the repository.
+4. **API/Network Layer:** No API calls are made in this example; data is retrieved from local storage (SQLite).
+5. **Repository Layer:** The `FSMRepository` parses the response and returns a list of `FSMState` objects to the service layer.
+6. **State Update:** The UI layer updates with the new data, displaying the list of states.
 
 ### Storage
 - **`SQLite`:** Stores FSM state, transition, and event data in a local database file (`fsm.db`).
