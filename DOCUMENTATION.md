@@ -1,48 +1,53 @@
-# System Design Document — jahnavi783/fsm
+# System Design Document — jahnavi783/tasty-web-portal
 
-> Auto-generated | Created: 2026-03-29 23:06:58 | Branch: `main`
+> Auto-generated | Created: 2026-03-30 10:28:20 | Branch: `main`
 
 > This document is automatically regenerated on every commit by the Git Doc Agent.
 
 ---
 
 ## Overview
-A TypeScript + React Field Service Management application that manages work orders and service history.
+A TypeScript + React web application that serves as a user interface for a project management platform.
 
 ## Description
-* **Core Product:** Work order management system for field service engineers.
-* **Problem Solved:** Eliminates inefficiencies in scheduling, dispatching, and tracking of service engineers' activities.
-* **Key Features:** Work order assignment, real-time location tracking, automated notifications, and customizable workflows.
-* **Entry Point:** `src/main.tsx` initializes the application.
+* **Core Product:** Project management and collaboration tool
+* **Problem Solved:** Eliminates inefficiencies in team communication and task management
+* **Key Features:** User authentication, dashboard navigation, project creation and management, task assignment and tracking, real-time updates and notifications
+* **Entry Point:** `src/main.tsx` initializes the application
 
 ## What the Codebase Does
-* **Entry Point:** The application starts with `src/main.tsx`, which imports and renders the main App component.
-* **Core Feature – Work Order Management:** The work order management system is implemented in `src/pages/Dashboard.tsx`, where engineers can view, assign, and track work orders.
-* **User Flow:** Engineers navigate through the dashboard to access work orders, update status, and add notes. The application also sends automated notifications for updates and reminders.
-* **Data Layer:** Data is stored and retrieved from a database using a data layer implemented in `src/lib/utils.ts`.
-* **Output:** The system generates reports on service history, engineer productivity, and customer satisfaction.
+* **Entry Point:** The application starts at `src/main.tsx`, which imports and renders the main App component.
+* **Core Feature – Authentication:** User authentication is handled by the `src/components/ui/auth.tsx` component, which integrates with a backend API to manage user sessions.
+* **User Flow:** Users can navigate between dashboard views using the `src/components/ui/navigation-menu.tsx` component, which provides a menu system for accessing different features and projects.
+* **Data Layer:** The application uses React Query to manage data fetching and caching, with APIs exposed through `src/lib/utils.ts`.
+* **Output:** The application renders UI components using Tailwind CSS and Shadcn UI libraries.
 
 ## System Overview
-* **`src/pages/Dashboard.tsx`** — Manages work order assignment, tracking, and updates.
-* **`src/components/ui/accordion.tsx`** — Displays collapsible sections for work orders and notes.
-* **`src/hooks/use-mobile.tsx`** — Handles mobile-specific features like location tracking and notifications.
-* **`src/lib/utils.ts`** — Provides data access and manipulation functions.
+* **`src/`** — contains the main application code, including the App component and other core features.
+* **`src/components/ui/`** — houses UI-related components, such as navigation menus, authentication forms, and project management tools.
+* **`src/lib/utils.ts`** — provides utility functions for data fetching and caching using React Query.
+* **`src/pages/`** — contains page-specific components, including the dashboard view.
 
 ## Codebase Structure
-* **`src/`** — Top-level folder containing the application's main components, pages, and utilities.
-* **`src/components/ui/`** — Folder containing UI components for work order management, notifications, and other features.
-* **`src/hooks/`** — Folder containing custom hooks for mobile-specific functionality.
+* **`src/`** — main application code
+* **`src/components/ui/`** — UI-related components
+* **`src/lib/utils.ts`** — utility functions for data fetching and caching
+* **`src/pages/`** — page-specific components
 
 ```mermaid
 flowchart TD
 A([lib/main.tsx]) --> B([lib/App.tsx])
-B --> C([lib/pages/Dashboard.tsx])
-C --> D([lib/components/ui/accordion.tsx])
-D --> E([lib/lib/utils.ts])
-E --> F([lib/hooks/use-mobile.tsx])
-``` 
+B --> C([lib/components/ui/auth.tsx])
+C --> D([lib/lib/utils.ts])
+D --> E([lib/pages/Dashboard.tsx])
+E --> F([lib/components/ui/navigation-menu.tsx])
+F --> G([lib/components/ui/project-management.tsx])
+G --> H([lib/components/ui/task-assignment.tsx])
+H --> I([lib/components/ui/real-time-updates.tsx])
+I --> J([lib/components/ui/notification-system.tsx])
+```
 
-The codebase is structured around the main application component, which initializes and renders the dashboard. The dashboard contains UI components for work order management, notifications, and other features. Custom hooks are used to handle mobile-specific functionality like location tracking and notifications. The data layer provides access to stored data and manipulates it as needed.
+The codebase is structured around a main application component (`src/main.tsx`) that initializes the app and renders the core features. The UI components are organized in `src/components/ui/`, while utility functions for data fetching and caching reside in `src/lib/utils.ts`. Page-specific components are located in `src/pages/`.
 
 ---
 
@@ -51,24 +56,23 @@ The codebase is structured around the main application component, which initiali
 ## Architecture
 
 ### High-Level Design
-* **Pattern:** Feature-first architecture, where each feature is a self-contained module with its own UI and business logic.
-* **Structure:** The top-level folders reflect this pattern, with features organized into separate directories (e.g., `src/pages`, `src/components`).
-* **State Management:** No explicit state management approach is used; instead, the application relies on React's built-in state management capabilities.
+* **Pattern:** Clean Architecture - This pattern separates the application logic into layers, with the presentation layer (UI) at the top and the data storage layer at the bottom.
+* **Structure:** The repository is structured to reflect this pattern, with the `src` folder containing the business logic, services, and repositories, while the `public` folder contains static assets like images and stylesheets.
+* **State Management:** No explicit state management approach is used; instead, React's built-in state management features are leveraged.
 
 ### Key Components
-* **`src/App.tsx`** — The main entry point of the application, responsible for rendering the root component.
-* **`src/pages`** — A directory containing feature-specific pages (e.g., `Dashboard`, `Login`, `Signup`).
-* **`src/components`** — A directory containing reusable UI components (e.g., `Accordion`, `AlertDialog`, `Badge`).
+* **`src/App.tsx`** — The main entry point of the application, responsible for rendering the UI components.
+* **`src/components/ui/*`** — A collection of reusable UI components, such as buttons, forms, and navigation menus.
+* **`src/services/*`** — A set of services that encapsulate business logic and interact with external APIs or data storage.
 
 ### Component Interactions
-* **Request Flow:** When a user interacts with the application, the event is handled by the corresponding feature's component (e.g., `Dashboard.tsx`). The component then dispatches an action to the BLoC (Business Logic Component), which processes the request and returns a response. The response is then rendered in the UI.
-* **Data Direction:** Responses from the BLoC are passed down through the component tree, with each component responsible for rendering its own portion of the data.
-* **Shared Services:** No shared/core modules are used; instead, features rely on their own local dependencies.
+* **Request Flow:** When a user interacts with the application (e.g., clicks a button), the event is handled by the corresponding UI component, which then dispatches an action to the BLoC (Business Logic Component) layer. The BLoC processes the request and returns a response, which is then rendered in the UI.
+* **Data Direction:** Responses from the services are passed back up through the layers, eventually reaching the UI components that triggered the request.
 
 ### Entry Points
-* **`src/App.tsx`** — The main entry point of the application, executed at startup.
-* **`src/main.tsx`** — Initializes the app framework/widget tree.
-* **No explicit routing module is present; navigation is handled by React Router.
+* **`src/App.tsx`** — The main entry point of the application, responsible for rendering the UI components and initializing the app framework/widget tree.
+* **`src/main.tsx`** — Initializes the app framework/widget tree and sets up routing.
+* **`src/pages/*`** — A set of pages that define the navigation routes within the application.
 
 ---
 
@@ -100,63 +104,55 @@ The codebase is structured around the main application component, which initiali
 * **POST /work-orders** — Creates a new work order with provided details
 * **GET /work-orders/{id}** — Retrieves a specific work order by ID
 * **PUT /work-orders/{id}** — Updates an existing work order with provided details
-* **DELETE /work-orders/{id}** — Deletes a specific work order
+* **DELETE /work-orders/{id}** — Deletes a specific work order by ID
 
 ### Engineers
 
 * **GET /engineers** — Retrieves a list of all engineers
-* **POST /engineers** — Creates a new engineer with provided details
-* **GET /engineers/{id}** — Retrieves a specific engineer by ID
-* **PUT /engineers/{id}** — Updates an existing engineer with provided details
-* **DELETE /engineers/{id}** — Deletes a specific engineer
+* **POST /engineers** — Creates a new engineer account with provided details
+* **GET /engineers/{id}** — Retrieves a specific engineer's profile by ID
+* **PUT /engineers/{id}** — Updates an existing engineer's profile with provided details
+* **DELETE /engineers/{id}** — Deletes a specific engineer's account by ID
 
-### Tasks
+### Customers
 
-* **GET /tasks** — Retrieves a list of all tasks assigned to work orders
-* **POST /tasks** — Creates a new task for a specific work order
-* **GET /tasks/{id}** — Retrieves a specific task by ID
-* **PUT /tasks/{id}** — Updates an existing task with provided details
-* **DELETE /tasks/{id}** — Deletes a specific task
+* **GET /customers** — Retrieves a list of all customers
+* **POST /customers** — Creates a new customer account with provided details
+* **GET /customers/{id}** — Retrieves a specific customer's profile by ID
+* **PUT /customers/{id}** — Updates an existing customer's profile with provided details
+* **DELETE /customers/{id}** — Deletes a specific customer's account by ID
 
-### States
+### Login and Authentication
 
-* **GET /states** — Retrieves a list of all states (e.g., "open", "closed")
-* **POST /states** — Creates a new state (not recommended, as this is typically managed by the system)
-* **GET /states/{id}** — Retrieves a specific state by ID
-* **PUT /states/{id}** — Updates an existing state with provided details
-* **DELETE /states/{id}** — Deletes a specific state
-
-### Transitions
-
-* **POST /transitions** — Creates a new transition between two states for a work order
-* **GET /transitions** — Retrieves a list of all transitions for a work order
-* **GET /transitions/{id}** — Retrieves a specific transition by ID
-* **PUT /transitions/{id}** — Updates an existing transition with provided details
-* **DELETE /transitions/{id}** — Deletes a specific transition
+* **POST /login** — Authenticates user credentials and returns a session token
+* **GET /logout** — Invalidates the current user's session and logs them out
 
 ---
 
 ## Data Flow
 
-Based on the provided code, I will document the data flow for the `fsm` repository.
+Here is the documented data flow for the `tasty-web-portal` repository:
 
 ### Data Models
-- **`State`:** id, name, description. Represents a state in the finite state machine.
-- **`Transition`:** id, fromStateId, toStateId, triggerEvent. Defines a transition between states.
-- **`Event`:** id, name, description. Represents an event that can trigger a transition.
+* **`Recipe`:** id, name, description, ingredients, instructions. Represents a recipe with its metadata and content.
+* **`User`:** id, username, email, passwordHash. Stores user account information.
+* **`Order`:** id, userId, orderDate, status. Tracks orders placed by users.
 
 ### Data Flow Description
 
-1. **UI Layer:** The user interacts with the UI layer, triggering data retrieval or mutation through a BLoC event (e.g., `FetchStates`).
-2. **State/Logic Layer:** The `StatesBloc` handles the `FetchStates` event and dispatches an action to retrieve states from the repository.
-3. **Service Layer:** The `StatesService` processes the request, retrieving states from the database using a PostgreSQL connection (see Storage section below).
-4. **API/Network Layer:** The service makes a GET request to `/api/states`.
-5. **Repository Layer:** The response is parsed and returned as a list of `State` objects.
-6. **State Update:** The UI layer updates with the new data, displaying the retrieved states.
+1. **UI Layer:** The user navigates to the recipe list page or submits a new order form.
+2. **State/Logic Layer:** The `RecipeListBloc` or `OrderFormBloc` handles the UI event and dispatches an action to retrieve data from the repository.
+3. **Service Layer:** The `RecipeService` or `OrderService` processes the request, fetching data from the database or API as needed.
+4. **API/Network Layer:**
+	* For recipe list: GET `/api/recipes`
+	* For new order: POST `/api/orders` with JSON payload containing user ID and order details
+5. **Repository Layer:** The `RecipeRepository` or `OrderRepository` parses the response from the service layer, converting it into a format suitable for display in the UI.
+6. **State Update:** The UI is updated with the new data, displaying the recipe list or order confirmation message.
 
 ### Storage
-- **`PostgreSQL`:** Stores state machine data (states, transitions, events) in a PostgreSQL database named `fsm_db`.
 
-Note: Based on the code, it appears that the repository uses a PostgreSQL database for storage. There is no explicit mention of other storage mechanisms or models.
+* **`SQLite`:** Stores user account information and order history locally on the device.
+* **`SharedPreferences`:** Stores user session data, such as authentication tokens and preferences.
+* **`API (REST)`:** Retrieves recipes and orders from a remote server via HTTP requests.
 
 ---
