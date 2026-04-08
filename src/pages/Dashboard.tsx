@@ -107,7 +107,7 @@ const Dashboard = () => {
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Discover amazing dishes, track your favorites, and explore the
-              full world of DeliciousEats
+              world of DeliciousEats
             </p>
           </div>
 
