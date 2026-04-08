@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -19,7 +18,7 @@ const Index = () => {
                 DeliciousEats
               </span>
             </div>
-            
+
             <div className="hidden md:flex items-center space-x-8">
               <a href="#about" className="text-gray-700 hover:text-orange-600 transition-colors">About</a>
               <a href="#menu" className="text-gray-700 hover:text-orange-600 transition-colors">Menu</a>
@@ -48,7 +47,7 @@ const Index = () => {
             </button>
           </div>
         </div>
-        
+
         {/* Mobile menu */}
         {isMenuOpen && (
           <div className="md:hidden bg-white/95 backdrop-blur-md border-t border-orange-100">
@@ -70,7 +69,7 @@ const Index = () => {
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-orange-400/20 via-red-400/20 to-yellow-400/20"></div>
-        
+
         {/* Decorative food icons */}
         <div className="absolute inset-0 overflow-hidden">
           <Utensils className="absolute top-20 left-10 h-16 w-16 text-orange-300/30 animate-pulse" />
@@ -89,12 +88,12 @@ const Index = () => {
                 Delivered Fresh
               </span>
             </h1>
-            
+
             <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
               Experience the finest culinary delights crafted with passion and served with love. 
               From farm to table, every bite tells a story.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link to="/login">
                 <Button 
@@ -123,20 +122,22 @@ const Index = () => {
             </div>
             <p className="text-sm font-semibold text-gray-800 mt-2">Fresh Ingredients</p>
           </div>
-          
+
           <div className="absolute top-1/3 right-10 bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg animate-float-delayed">
             <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-xl flex items-center justify-center">
               <ChefHat className="h-8 w-8 text-white" />
             </div>
             <p className="text-sm font-semibold text-gray-800 mt-2">Expert Chefs</p>
           </div>
-          
+
+          {/* Uncomment this if needed
           <div className="absolute bottom-1/4 left-1/4 bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg animate-float">
             <div className="w-16 h-16 bg-gradient-to-br from-red-400 to-pink-400 rounded-xl flex items-center justify-center">
               <Users className="h-8 w-8 text-white" />
             </div>
             <p className="text-sm font-semibold text-gray-800 mt-2">Happy Customers</p>
           </div>
+          */}
         </div>
       </section>
 
@@ -151,7 +152,7 @@ const Index = () => {
               We're committed to bringing you the most delicious and fresh food experience
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-orange-50 to-red-50 hover:shadow-lg transition-all duration-300">
               <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -160,7 +161,7 @@ const Index = () => {
               <h3 className="text-2xl font-bold text-gray-800 mb-4">Fresh Ingredients</h3>
               <p className="text-gray-600">Sourced directly from local farms and premium suppliers for the freshest taste.</p>
             </div>
-            
+
             <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-yellow-50 to-orange-50 hover:shadow-lg transition-all duration-300">
               <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
                 <ChefHat className="h-8 w-8 text-white" />
@@ -168,7 +169,7 @@ const Index = () => {
               <h3 className="text-2xl font-bold text-gray-800 mb-4">Expert Chefs</h3>
               <p className="text-gray-600">Our world-class chefs create culinary masterpieces that delight your senses.</p>
             </div>
-            
+
             <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-red-50 to-pink-50 hover:shadow-lg transition-all duration-300">
               <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Star className="h-8 w-8 text-white" />

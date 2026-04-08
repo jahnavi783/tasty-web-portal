@@ -1,12 +1,18 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { ChefHat, Mail, Lock, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { log } from "console";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -18,16 +24,44 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
-    // Simulate login process
-    setTimeout(() => {
-      setIsLoading(false);
-      toast({
-        title: "Welcome back!",
-        description: "You have successfully logged in.",
+
+    try {
+      const formData = new FormData();
+      formData.append("email", email);
+      formData.append("password", password);
+
+      const response = await fetch("http://127.0.0.1:8000/login", {
+        method: "POST",
+        body: formData,
       });
-      navigate("/dashboard");
-    }, 1500);
+
+      const data = await response.json();
+      console.log("Login response:", data);
+
+      // Check if the response is ok and contains a token
+
+      if (response.ok) {
+        toast({
+          title: "Welcome back!",
+          description: data.message,
+        });
+        navigate("/dashboard");
+      } else {
+        toast({
+          title: "Login failed",
+          description: data.message,
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Unable to connect to server.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -41,7 +75,10 @@ const Login = () => {
 
       <div className="relative z-10 w-full max-w-md">
         {/* Back button */}
-        <Link to="/" className="inline-flex items-center text-orange-600 hover:text-orange-700 mb-6 transition-colors">
+        <Link
+          to="/"
+          className="inline-flex items-center text-orange-600 hover:text-orange-700 mb-6 transition-colors"
+        >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Home
         </Link>
@@ -62,7 +99,9 @@ const Login = () => {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-gray-700">Email</Label>
+                <Label htmlFor="email" className="text-gray-700">
+                  Email
+                </Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                   <Input
@@ -78,7 +117,9 @@ const Login = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-gray-700">Password</Label>
+                <Label htmlFor="password" className="text-gray-700">
+                  Password
+                </Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                   <Input
@@ -95,10 +136,16 @@ const Login = () => {
 
               <div className="flex items-center justify-between text-sm">
                 <label className="flex items-center space-x-2 text-gray-600">
-                  <input type="checkbox" className="rounded border-orange-300 text-orange-600 focus:ring-orange-500" />
+                  <input
+                    type="checkbox"
+                    className="rounded border-orange-300 text-orange-600 focus:ring-orange-500"
+                  />
                   <span>Remember me</span>
                 </label>
-                <a href="#" className="text-orange-600 hover:text-orange-700 transition-colors">
+                <a
+                  href="#"
+                  className="text-orange-600 hover:text-orange-700 transition-colors"
+                >
                   Forgot password?
                 </a>
               </div>
@@ -115,7 +162,10 @@ const Login = () => {
             <div className="mt-6 text-center">
               <p className="text-gray-600">
                 Don't have an account?{" "}
-                <Link to="/signup" className="text-orange-600 hover:text-orange-700 font-semibold transition-colors">
+                <Link
+                  to="/signup"
+                  className="text-orange-600 hover:text-orange-700 font-semibold transition-colors"
+                >
                   Sign up
                 </Link>
               </p>
