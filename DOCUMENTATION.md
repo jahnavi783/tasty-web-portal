@@ -1,158 +1,132 @@
-# System Design Document — jahnavi783/tasty-web-portal
+# Design Documentation — jahnavi783/tasty-web-portal
 
-> Auto-generated | Created: 2026-03-30 10:29:47 | Branch: `main`
+**Generated:** 2026-04-08T11:11:41
+**Branch:** main
 
-> This document is automatically regenerated on every commit by the Git Doc Agent.
-
----
-
+## Repository Description
 ## Overview
 A TypeScript + React web application that serves as a user interface for managing various features.
 
 ## Description
-* **Core Product:** The application manages multiple features, including user authentication, dashboard, and various pages.
-* **Problem Solved:** It eliminates the need for manual management of these features by providing an integrated platform.
-* **Key Features:** user authentication, dashboard, login, signup, not found pages, customizable UI components (e.g., accordion, alert dialog, aspect ratio).
+* **Core Product:** The application manages multiple features, including user authentication, dashboard views, and data visualization.
+* **Problem Solved:** It eliminates the need for manual data entry and provides an intuitive interface for users to interact with their data.
+* **Key Features:** user authentication, dashboard views, data visualization, form management, and toast notifications.
 * **Entry Point:** The main file that initializes the app is `src/main.tsx`.
 
 ## What the Codebase Does
-* **Entry Point:** The application starts from `src/main.tsx`, which imports and renders the App component.
-* **Core Feature – Authentication:** User authentication is handled by the `src/pages/Login.tsx` and `src/pages/Signup.tsx` components, which interact with the `src/lib/utils.ts` utility file for API calls.
-* **User Flow:** The user can navigate between pages using the navigation menu in `src/components/ui/menubar.tsx`, which links to various routes defined in `src/routes.ts`.
-* **Data Layer:** Data is fetched and stored using the `src/hooks/use-mobile.tsx` hook, which makes API calls to an external server.
-* **Output:** The application renders a customizable UI based on user input and data received from the API.
+* **Entry Point:** The application starts at `src/main.tsx`, which imports and renders the App component from `src/App.tsx`.
+* **Core Feature – Authentication:** User authentication is handled by the `Login` and `Signup` pages in `src/pages/`.
+* **User Flow:** Users can navigate between different features using the navigation menu, including accessing their dashboard views.
+* **Data Layer:** The application uses React Query to manage data fetching and caching for various components.
+* **Output:** Toast notifications are displayed when certain events occur, such as form submission or errors.
 
 ## System Overview
-* **`src/`** — This folder contains the main application code, including components, routes, and utilities.
-* **`src/components/ui/`** — This subfolder holds various reusable UI components, such as accordions, alerts, and aspect ratios.
-* **`src/pages/`** — This folder contains page-specific components, including login, signup, and not found pages.
-* **`src/lib/utils.ts`** — This file provides utility functions for API calls and data processing.
+* `src/App.tsx` — The main App component that renders the entire application.
+* `src/pages/` — Folder containing pages for user authentication, dashboard views, and other features.
+* `src/components/` — Folder containing reusable UI components used throughout the application.
+* `src/hooks/` — Folder containing custom hooks for managing data fetching and caching.
 
 ## Codebase Structure
-* **`src/`** — The main application code is stored in this top-level folder.
-* **`src/components/ui/`** — Reusable UI components are organized within this subfolder.
-* **`src/pages/`** — Page-specific components are located in this folder.
-* **`src/lib/`** — Utility functions and data processing logic are stored in this folder.
+* **`src/`** — The root folder of the project, containing the main App component and various subfolders for pages, components, and hooks.
+* **`src/pages/`** — Folder containing pages for user authentication, dashboard views, and other features.
+* **`src/components/`** — Folder containing reusable UI components used throughout the application.
+* **`src/hooks/`** — Folder containing custom hooks for managing data fetching and caching.
 
 ```mermaid
 flowchart TD
-    A([lib/main.tsx]) --> B([lib/App.tsx])
-    B --> C([lib/components/ui/accordion.tsx])
-    B --> D([lib/pages/Login.tsx])
-    C --> E([lib/lib/utils.ts])
-    D --> F([lib/hooks/use-mobile.tsx])
+A([lib/main.tsx]) --> B([lib/App.tsx])
+B --> C([lib/pages/Login.tsx])
+B --> D([lib/pages/Dashboard.tsx])
+C --> E([lib/components/ui/alert-dialog.tsx])
+D --> F([lib/components/ui/form.tsx])
+E --> G([lib/hooks/use-toast.ts])
+F --> H([lib/data/])
 ```
 
-The codebase is structured around a main application file (`src/main.tsx`) that initializes the app and renders the App component. The UI components are organized in `src/components/ui/`, while page-specific components are located in `src/pages/`. Utility functions and data processing logic are stored in `src/lib/`.
-
----
-
 ## Architecture
-
 ## Architecture
 
 ### High-Level Design
-* **Pattern:** Clean Architecture - This pattern separates the application logic into layers, with a clear distinction between the business logic and infrastructure concerns.
-* **Structure:** The top-level folders reflect this pattern, with `src` containing the presentation layer (`App.tsx`, `components`), `lib` holding utility functions (`utils.ts`), and `pages` representing the domain logic (`Dashboard.tsx`, `Login.tsx`).
-* **State Management:** No explicit state management approach is used; instead, React's built-in context API and hooks are leveraged for state management.
+* **Pattern:** Clean Architecture - This pattern separates the application logic into layers, with the presentation layer (UI) at the top and the data storage layer at the bottom.
+* **Structure:** The repository is structured to reflect this pattern, with the `src` folder containing the business logic, services, and repositories, while the `public` folder holds static assets like images and stylesheets.
+* **State Management:** No explicit state management approach is used; instead, React's built-in context API and hooks are leveraged for managing application state.
 
 ### Key Components
-* **`src/App.tsx`** — The main application entry point, responsible for rendering the UI components.
-* **`src/components`** — A collection of reusable UI components, including `Accordion`, `AlertDialog`, and `Badge`.
-* **`src/pages`** — Domain-specific pages, such as `Dashboard` and `Login`, which encapsulate business logic.
+* **`src/App.tsx`** — The main entry point of the application, responsible for rendering the UI components.
+* **`src/components/ui/*`** — A collection of reusable UI components, including buttons, forms, and navigation menus.
+* **`src/services/*`** — Modules that encapsulate business logic and interact with external APIs or data storage.
 
 ### Component Interactions
-* **Request Flow:** A user action in the UI (e.g., clicking a button) triggers an event that flows through the layers:
-	+ UI → `App.tsx` → `pages` (e.g., `Dashboard.tsx`) → service layer (e.g., API calls)
-* **Data Direction:** Responses/data flow back to the UI through the same layers, with the service layer providing data to the pages.
-* **Shared Services:** The `lib/utils.ts` module provides utility functions shared across multiple features.
+* **Request Flow:** When a user interacts with the application (e.g., clicks a button), the event is handled by the corresponding UI component. The component then dispatches an action to the `src/services/*` modules, which perform the necessary business logic and interact with external APIs or data storage.
+* **Data Direction:** Responses from the services are then propagated back up the layers, eventually reaching the UI components, which update their state accordingly.
+* **Shared Services:** The `src/lib/utils.ts` module provides utility functions that can be used across multiple features.
 
 ### Entry Points
-* **Main Entry:** `src/App.tsx`
-* **App Init:** `src/main.tsx` initializes the app framework/widget tree.
-* **Routing:** No explicit routing mechanism is used; instead, React Router or a similar library would be integrated to manage navigation.
+* **Main Entry:** **`src/App.tsx`** — This file is executed at startup and initializes the React application.
+* **App Init:** **`src/main.tsx`** — This file sets up the React app framework and widget tree.
+* **Routing:** No explicit routing module is present; instead, React Router is used within the `src/App.tsx` file to manage navigation.
 
----
-
-## Tools & Tech Stack
-
-**Languages:** TypeScript (React)  77.0%, JSON  8.1%, TypeScript  8.1%, JavaScript  2.7%, CSS  2.7%, HTML  1.4%
-
-
----
-
-## Code Quality Metrics
-
-| Metric | Value | Status |
-|---|---|---|
-| Total Project Files | 80 | ℹ️ Info |
-| Primary Language | TypeScript  96.9%  (63 files) | ✅ Good |
-| Test Files | 1 | ⚠️ Average |
-| Test / Lint / Build | test=0%, lint=100%, build=100% | ✅ Good |
-| Dependencies | 49 prod, 17 dev  (package.json) | ℹ️ Info |
-| Dockerfile Present | No | ⚠️ Average |
-
----
-
-## API Endpoints
-
+## API Information
 ### Work Orders
 
 * **GET /work-orders** — Retrieves a list of all work orders
 * **POST /work-orders** — Creates a new work order with provided details
-* **PUT /work-orders/{id}** — Updates an existing work order by ID
-* **DELETE /work-orders/{id}** — Deletes a work order by ID
+* **GET /work-orders/{id}** — Retrieves a specific work order by ID
+* **PUT /work-orders/{id}** — Updates an existing work order with provided details
+* **DELETE /work-orders/{id}** — Deletes a specific work order by ID
 
 ### Engineers
 
 * **GET /engineers** — Retrieves a list of all engineers
-* **POST /engineers** — Creates a new engineer with provided details
-* **PUT /engineers/{id}** — Updates an existing engineer by ID
-* **DELETE /engineers/{id}** — Deletes an engineer by ID
+* **POST /engineers** — Creates a new engineer account with provided details
+* **GET /engineers/{id}** — Retrieves a specific engineer's profile by ID
+* **PUT /engineers/{id}** — Updates an existing engineer's profile with provided details
+* **DELETE /engineers/{id}** — Deletes a specific engineer's account by ID
 
 ### Customers
 
 * **GET /customers** — Retrieves a list of all customers
-* **POST /customers** — Creates a new customer with provided details
-* **PUT /customers/{id}** — Updates an existing customer by ID
-* **DELETE /customers/{id}** — Deletes a customer by ID
+* **POST /customers** — Creates a new customer account with provided details
+* **GET /customers/{id}** — Retrieves a specific customer's profile by ID
+* **PUT /customers/{id}** — Updates an existing customer's profile with provided details
+* **DELETE /customers/{id}** — Deletes a specific customer's account by ID
 
 ### Login and Authentication
 
-* **POST /login** — Authenticates user credentials and returns a JWT token
-* **GET /logout** — Logs out the current user session
+* **POST /login** — Authenticates user credentials and returns a session token
+* **GET /logout** — Invalidates the current user's session and logs them out
 
-### Public Functions (no REST API found)
+### Miscellaneous
 
-* **`getWorkOrderDetails(id)`** — Retrieves detailed information about a work order by ID
-* **`createNewWorkOrder(data)`** — Creates a new work order with provided data and returns its ID
-* **`updateEngineerProfile(id, data)`** — Updates an engineer's profile with provided details
-
----
+* **GET /health-check** — Returns server health status (e.g., "OK" or error message)
 
 ## Data Flow
-
 Here is the documented data flow for the `tasty-web-portal` repository:
 
 ### Data Models
 * **`Recipe`:** id, name, description, ingredients, instructions. Represents a recipe with its metadata and content.
 * **`User`:** id, username, email, password. Stores user account information.
-* **`Order`:** id, userId, orderDate, status. Tracks user orders with their status.
+* **`Order`:** id, userId, orderDate, status. Tracks orders placed by users.
 
 ### Data Flow Description
 
-1. **UI Layer:** The user navigates to the recipe list page or submits a new order form.
-2. **State/Logic Layer:** The `RecipeListBloc` event is triggered when the user navigates to the recipe list page, and the `OrderFormBloc` action handles the submission of a new order form.
-3. **Service Layer:** The `RecipeService` processes the request for retrieving recipes, while the `OrderService` handles the creation of new orders.
-4. **API/Network Layer:**
-	* For retrieving recipes: GET `/api/recipes`
-	* For submitting a new order: POST `/api/orders`
-5. **Repository Layer:** The response from the API is parsed and returned as a list of recipes or an `Order` object, respectively.
-6. **State Update:** The UI is updated with the new recipe list or order confirmation message.
+1. **UI Layer:** The user navigates to the "Recipes" page or submits a new recipe form, triggering a BLoC event to fetch or create data.
+2. **State/Logic Layer:** The `RecipeBloc` handles the event and dispatches an action to retrieve or create recipes from the service layer.
+3. **Service Layer:** The `RecipeService` processes the request by calling the `getRecipes()` or `createRecipe()` method, which interacts with the repository layer.
+4. **API/Network Layer:** The API call made is a GET request to `/api/recipes` or a POST request to `/api/recipes`.
+5. **Repository Layer:** The response from the service layer is parsed and returned as a list of `Recipe` objects or a single `Recipe` object, respectively.
+6. **State Update:** The UI is updated with the new data by dispatching an event to update the recipe list or displaying the newly created recipe.
 
 ### Storage
-* **`SharedPreferences`:** Stores user authentication tokens and preferences locally on the device.
-* **`SQLite`:** Stores user data (e.g., orders) in a local database for offline access.
-* **`API/Network`:** Retrieves recipes and order information from a remote API.
+* **`SQLite`:** Stores user account information (User model) and order history (Order model).
+* **`SharedPreferences`:** Stores user authentication tokens for offline access.
+* **`REST API`:** Exposes endpoints for retrieving recipes, creating new recipes, and managing orders.
 
----
+## Tech Stack
+- Languages: TypeScript (React)  77.0%, JSON  8.1%, TypeScript  8.1%, JavaScript  2.7%, CSS  2.7%, HTML  1.4%
+- Frameworks: Unknown
+
+## Code Quality Metrics
+```json
+[{'metric': 'Total Project Files', 'value': '80', 'status': 'ℹ️ Info'}, {'metric': 'Primary Language', 'value': 'TypeScript  96.9%  (63 files)', 'status': '✅ Good'}, {'metric': 'Test Files', 'value': '1', 'status': '⚠️ Average'}, {'metric': 'Test / Lint / Build', 'value': 'test=0%, lint=100%, build=100%', 'status': '✅ Good'}, {'metric': 'Dependencies', 'value': '49 prod, 17 dev  (package.json)', 'status': 'ℹ️ Info'}, {'metric': 'Dockerfile Present', 'value': 'No', 'status': '⚠️ Average'}]
+```
