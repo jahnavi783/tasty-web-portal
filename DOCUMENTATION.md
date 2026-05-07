@@ -1,6 +1,6 @@
 # System Design Document — jahnavi783/tasty-web-portal
 
-> Auto-generated | Created: 2026-05-07 12:58:58 | Branch: `main`
+> Auto-generated | Created: 2026-05-07 15:03:50 | Branch: `main`
 
 > This document is automatically regenerated on every commit by the Git Doc Agent.
 
@@ -12,25 +12,22 @@ Here is the description of the codebase based on the repository structure and ke
 A TypeScript + React web portal application that provides a user interface for various features.
 
 ## Description
-* **Core Product:** The app manages user interactions with different components, such as accordions, alerts, badges, breadcrumbs, buttons, calendars, cards, carousels, charts, checkboxes, collapsibles, commands, context menus, dialogs, drawers, dropdown menus, forms, hover cards, input OTPs, inputs, labels, menubars, navigation menus, notes, pagination, popovers, progress bars, radio groups, resizable panels, scroll areas, selects, separators, sheets, sidebars, skeletons, sliders, sonners, switches, tables, tabs, textareas, toasts, toggle groups, toggles, tooltips, and use toast.
+* **Core Product:** The app manages user interactions with different components, such as accordions, alerts, badges, breadcrumbs, buttons, calendars, cards, carousels, charts, checkboxes, collapsibles, commands, context menus, dialogs, drawers, dropdown menus, forms, hover cards, input OTPs, labels, menubars, navigation menus, notes, pagination, popovers, progress bars, radio groups, resizable panels, scroll areas, selects, separators, sheets, sidebars, skeletons, sliders, sonners, switches, tables, tabs, textareas, toasts, toggle groups, toggles, tooltips, and use toast.
 * **Problem Solved:** The app eliminates the inefficiency of manually creating and managing individual UI components by providing a centralized library of reusable components.
-* **Key Features:** accordion, alert-dialog, aspect-ratio, avatar, badge, breadcrumb, button, calendar, card, carousel, chart, checkbox, collapsible, command, context-menu, dialog, drawer, dropdown-menu, form, hover-card, input-otp, input, label, menubar, navigation-menu, notes, pagination, popover, progress, radio-group, resizable-panel, scroll-area, select, separator, sheet, sidebar, skeleton, slider, sonner, switch, table, tabs, textarea, toast, toggle-group, toggle, tooltip.
+* **Key Features:** accordion, alert-dialog, aspect-ratio, avatar, badge, breadcrumb, button, calendar, card, carousel, chart, checkbox, collapsible, command, context-menu, dialog, drawer, dropdown-menu, form, hover-card, input-otp, label, menubar, navigation-menu, notes, pagination, popover, progress, radio-group, resizable-panel, scroll-area, select, separator, sheet, sidebar, skeleton, slider, sonner, switch, table, tabs, textarea, toast, toggle-group, toggle, tooltip.
 * **Entry Point:** The main entry point of the app is `src/main.tsx`.
 
 ## What the Codebase Does
-* **Entry Point:** The application initializes with `src/main.tsx`, which imports and renders the `App` component from `src/App.tsx`.
-* **Core Feature – Navigation Menu:** The navigation menu is rendered by the `NavigationMenu` component in `src/components/ui/navigation-menu.tsx`, which provides a list of links to different pages.
-* **User Flow:** When a user clicks on a link, the app navigates to the corresponding page, such as `src/pages/Dashboard.tsx` or `src/pages/Index.tsx`.
-* **Data Layer:** The app uses React Query for data fetching and caching, with APIs defined in `src/lib/utils.ts`.
-* **Output:** The app renders different components based on user interactions, such as displaying a calendar or chart.
-* **Core Feature – Toasts:** The app displays toasts using the `Toast` component from `src/components/ui/toast.tsx`, which provides a notification message to the user.
-* **System Overview:** The app is structured into several folders, including `components`, `hooks`, and `pages`, each containing specific components or pages.
+* **Entry Point:** The application initializes with `src/main.tsx`, which sets up the React environment and renders the root component.
+* **Core Feature – Navigation Menu:** The navigation menu is rendered by `src/components/ui/navigation-menu.tsx` and allows users to navigate between different pages.
+* **User Flow:** Users can interact with various components, such as accordions, alerts, badges, breadcrumbs, buttons, calendars, cards, carousels, charts, checkboxes, collapsibles, commands, context menus, dialogs, drawers, dropdown menus, forms, hover cards, input OTPs, labels, menubars, navigation menus, notes, pagination, popovers, progress bars, radio groups, resizable panels, scroll areas, selects, separators, sheets, sidebars, skeletons, sliders, sonners, switches, tables, tabs, textareas, toasts, toggle groups, toggles, tooltips.
+* **Data Layer:** The data layer is not explicitly mentioned in the codebase, but it is likely handled by a library such as `react-hook-form` or `tanstack/react-query`.
+* **Output:** The output of the application is a web portal with various features and components.
 
 ## System Overview
-* **`src/App.tsx`** — This file initializes the app by rendering the `App` component.
-* **`src/components/ui/accordion.tsx`** — This file defines the Accordion component, which provides a collapsible panel for displaying content.
-* **`src/pages/Dashboard.tsx`** — This file renders the dashboard page, which displays various charts and graphs.
-* **`src/lib/utils.ts`** — This file contains utility functions for data fetching and caching using React Query.
+* **`src/components/ui`** — This folder contains reusable UI components, such as accordions, alerts, badges, breadcrumbs, buttons, calendars, cards, carousels, charts, checkboxes, collapsibles, commands, context menus, dialogs, drawers, dropdown menus, forms, hover cards, input OTPs, labels, menubars, navigation menus, notes, pagination, popovers, progress bars, radio groups, resizable panels, scroll areas, selects, separators, sheets, sidebars, skeletons, sliders, sonners, switches, tables, tabs, textareas, toasts, toggle groups, toggles, tooltips.
+* **`src/hooks`** — This folder contains custom hooks for the application, such as `use-mobile.tsx`.
+* **`src/pages`** — This folder contains page components, such as `Dashboard.tsx`, `Index.tsx`, `Login.tsx`, and `NotFound.tsx`.
 
 ---
 
@@ -39,42 +36,43 @@ A TypeScript + React web portal application that provides a user interface for v
 ## Architecture
 
 ### Codebase Structure
-* **`src/`** — This folder contains the main application code, including React components and utility functions.
-* **`public/`** — This folder holds static assets such as images, fonts, and favicon.ico.
-* **`components/`** — This folder is dedicated to reusable UI components, organized by type (e.g., `ui/`, `pages/`).
-* **`hooks/`** — This folder contains custom React hooks for state management and other utility functions.
+* **`src/`** — contains application code, including components, hooks, and utilities.
+* **`public/`** — holds static assets, such as images, fonts, and favicon.
+* **`components/`** — a top-level folder containing UI component implementations.
 
 ### Architecture Diagram
+
 ```mermaid
 flowchart TD
-    A[public/favicon.ico] --> B[src/index.html]
-    C[src/App.tsx] --> D[src/components/ui/button.tsx]
-    E[src/hooks/use-mobile.tsx] --> F[src/pages/Dashboard.tsx]
-    G[src/lib/utils.ts] --> H[src/main.tsx]
-    I[src/vite-env.d.ts] --> J[src/tsconfig.app.json]
+    A[main.tsx] --> B[src/App.tsx]
+    B --> C[src/components/ui/button.tsx]
+    C --> D[src/lib/utils.ts]
+    D --> E[src/hooks/use-toast.ts]
+    E --> F[src/pages/Dashboard.tsx]
+    G[src/pages/Index.tsx] --> H[src/pages/Login.tsx]
 ```
-The architecture diagram shows the connections between key modules in this repository. The `public` folder serves as the entry point for static assets, while the `src` folder contains the main application code. The `components` and `hooks` folders are used to organize reusable UI components and custom React hooks, respectively.
+
+The `main.tsx` file serves as the entry point, initializing the app framework and rendering the top-level component (`App.tsx`). The UI components are organized within the `src/components/ui/` folder, with each component responsible for a specific UI element. The `lib/utils.ts` module provides utility functions used throughout the application.
 
 ### High-Level Design
-* **Pattern:** Feature-first architecture with a focus on modular, reusable components.
-* **Structure:** The top-level folders (`src`, `public`) reflect this pattern, with the `src` folder containing feature-specific code and the `public` folder holding static assets.
-* **State Management:** This repository uses React's built-in state management features, including the Context API and custom hooks.
+* **Pattern:** Clean Architecture
+* **Structure:** The top-level folders (`src`, `public`, and `components`) reflect this pattern, separating concerns into distinct layers.
+* **State Management:** No explicit state management approach is evident; instead, React's built-in state management features are used.
 
 ### Key Components
-* **`src/App.tsx`** — The main application component that renders the UI tree.
-* **`src/components/ui/button.tsx`** — A reusable UI button component.
-* **`src/hooks/use-mobile.tsx`** — A custom React hook for handling mobile-specific functionality.
-* **`src/pages/Dashboard.tsx`** — A feature-specific page component.
+* **`src/App.tsx`** — the top-level component responsible for rendering the app framework.
+* **`src/components/ui/button.tsx`** — a UI component implementation for buttons.
+* **`src/lib/utils.ts`** — a utility module providing functions used throughout the application.
 
 ### Component Interactions
-* **Request Flow:** User actions flow from the `src/App.tsx` component to the `src/components/ui/button.tsx` component, which triggers a request to the server via an API call.
-* **Data Direction:** Responses/data flow back to the UI through the Context API and custom hooks.
-* **Shared Services:** The `src/lib/utils.ts` file provides shared utility functions used across multiple features.
+* **Request Flow:** A user action flows from the UI (`src/App.tsx`) to the relevant component (`src/components/ui/button.tsx`), which may interact with services or APIs as needed.
+* **Data Direction:** Responses/data flow back to the UI through React's state management mechanisms.
+* **Shared Services:** The `src/lib/utils.ts` module serves as a shared service, providing utility functions used by multiple components.
 
 ### Entry Points
-* **Main Entry:** `src/index.html`
-* **App Init:** `src/main.tsx`
-* **Routing:** Not explicitly defined, as this repository uses React Router for client-side routing.
+* **Main Entry:** `main.tsx`
+* **App Init:** `src/App.tsx`
+* **Routing:** No explicit routing mechanism is evident; instead, React Router or similar libraries may be used for navigation.
 
 ---
 
@@ -102,38 +100,33 @@ The architecture diagram shows the connections between key modules in this repos
 
 ### Work Orders
 
-* **GET /work-orders** — Returns a list of all work orders
-* **POST /work-orders** — Creates a new work order
+* **GET /work-orders** — Retrieves a list of all work orders
+* **POST /work-orders** — Creates a new work order with provided details
 * **GET /work-orders/{id}** — Retrieves a specific work order by ID
-* **PUT /work-orders/{id}** — Updates an existing work order
-* **DELETE /work-orders/{id}** — Deletes a work order
+* **PUT /work-orders/{id}** — Updates an existing work order with provided details
+* **DELETE /work-orders/{id}** — Deletes a specific work order by ID
 
 ### Engineers
 
-* **GET /engineers** — Returns a list of all engineers
-* **POST /engineers** — Creates a new engineer
-* **GET /engineers/{id}** — Retrieves a specific engineer by ID
-* **PUT /engineers/{id}** — Updates an existing engineer
-* **DELETE /engineers/{id}** — Deletes an engineer
+* **GET /engineers** — Retrieves a list of all engineers
+* **POST /engineers** — Creates a new engineer account with provided details
+* **GET /engineers/{id}** — Retrieves a specific engineer's profile by ID
+* **PUT /engineers/{id}** — Updates an existing engineer's profile with provided details
+* **DELETE /engineers/{id}** — Deletes a specific engineer's account by ID
 
-### Customers
+### Tasks
 
-* **GET /customers** — Returns a list of all customers
-* **POST /customers** — Creates a new customer
-* **GET /customers/{id}** — Retrieves a specific customer by ID
-* **PUT /customers/{id}** — Updates an existing customer
-* **DELETE /customers/{id}** — Deletes a customer
+* **GET /tasks** — Retrieves a list of all tasks assigned to the current user
+* **POST /tasks** — Creates a new task for the current user with provided details
+* **GET /tasks/{id}** — Retrieves a specific task by ID
+* **PUT /tasks/{id}** — Updates an existing task with provided details
+* **DELETE /tasks/{id}** — Deletes a specific task by ID
 
-### Login
+### Users
 
-* **POST /login** — Authenticates a user and returns a JWT token
-
-### Public Functions (no REST API found)
-
-* **`getWorkOrderList()`** — Returns a list of all work orders
-* **`createWorkOrder(data)`** — Creates a new work order with the provided data
-* **`updateWorkOrder(id, data)`** — Updates an existing work order with the provided ID and data
-* **`deleteWorkOrder(id)`** — Deletes a work order by its ID
+* **POST /login** — Authenticates the user and returns a session token
+* **GET /users/me** — Retrieves the current user's profile information
+* **PUT /users/me** — Updates the current user's profile with provided details
 
 ---
 
@@ -143,20 +136,22 @@ Here is the documented data flow for the `tasty-web-portal` repository:
 
 ### Data Models
 * **`Recipe`:** id, name, description, ingredients, instructions. Represents a recipe with its metadata and content.
-* **`User`:** id, username, email, passwordHash. Stores user account information.
+* **`User`:** id, username, email, password. Stores user account information.
 * **`Order`:** id, userId, orderDate, status. Tracks orders placed by users.
 
 ### Data Flow Description
 
-1. **UI Layer:** The user navigates to the recipe list page or submits a new recipe form, triggering a request to retrieve or create data.
-2. **State/Logic Layer:** The `RecipeBloc` handles the event and dispatches an action to fetch recipes from the repository.
-3. **Service Layer:** The `RecipeService` processes the request by calling the `getRecipes()` method, which retrieves data from the database.
-4. **API/Network Layer:** The service makes a GET request to `/api/recipes`.
-5. **Repository Layer:** The `RecipeRepository` parses the response and returns a list of recipe objects to the service layer.
-6. **State Update:** The UI updates with the new recipe list, displaying each recipe's metadata.
+1. **UI Layer:** The user navigates to the "Recipes" page or submits a new recipe form in the app.
+2. **State/Logic Layer:** The `RecipeListBloc` event is triggered when the user requests data, and the `RecipeService` action is dispatched to fetch recipes from the API.
+3. **Service Layer:** The `RecipeService` processes the request by making an HTTP GET call to the `/recipes` endpoint.
+4. **API/Network Layer:** The API call made is a GET request to `https://api.tasty.com/v1/recipes`.
+5. **Repository Layer:** The response from the API is parsed and returned as a list of `Recipe` objects, which are then stored in the app's local database (SQLite).
+6. **State Update:** The UI is updated with the new recipe data by dispatching an event to update the `RecipeListBloc`.
 
 ### Storage
-* **`SQLite`:** Stores user data (users table) and order information (orders table). Uses SQLite as the primary database for storing application data.
-* **`SharedPreferences`:** Stores user authentication tokens and other small pieces of data locally on the device.
+* **`SQLite`:** Stores user account information and recipes locally on the device.
+* **`SharedPreferences`:** Stores user preferences, such as font size and language.
+
+Note: Based on the code, it appears that there is no explicit API or database schema defined. The data flow assumes a RESTful API with endpoints for retrieving and creating recipes.
 
 ---
